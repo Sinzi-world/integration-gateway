@@ -1,3 +1,22 @@
 spring:
   application:
     name: integration-gateway
+
+gateway:
+  routes:
+    - id: create-counterparty
+      path: /api/v1/counterparties
+      method: POST
+      target:
+        url: http://1c-server/base/hs/partners/create
+        auth:
+          type: BASIC
+          username: integration
+          password: secret
+      transform:
+        request:
+          - from: $.name
+            to:   $.Наименование
+        response:
+          - from: $.Ref
+            to:   $.id
